@@ -103,7 +103,7 @@ public class ShiroConfig {
 
 
         filterChainDefinitionMap.put("/login", "anon"); // 可匿名访问
-        filterChainDefinitionMap.put("/logout", "logout"); // 退出登录
+        filterChainDefinitionMap.put("/logout", "anon"); // 退出登录
         filterChainDefinitionMap.put("/**", "jwtFilter,authc"); // 需登录才能访问
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;

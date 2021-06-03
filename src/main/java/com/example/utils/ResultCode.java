@@ -23,7 +23,8 @@ public enum ResultCode {
     IO_EXCEPTION(400, "读写异常"),
     LOGIN_SUCCESS(200, "登录成功"),
     LOGIN_FAILURE(400, "登录失败"),
-    NO_AUTHORITY(400, "没有权限");
+    NO_AUTHORITY(400, "没有权限"),
+    LOGOUT_SUCCESS(200, "退出成功");
 
     // http状态码
     int code;

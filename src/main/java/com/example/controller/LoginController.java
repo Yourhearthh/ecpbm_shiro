@@ -49,9 +49,9 @@ public class LoginController {
             String jwtToken = JwtUtils.sign(userName, JwtUtils.SECRET);
             // 将签发的 JWT token 设置到 HttpServletResponse 的 Header 中
             ((HttpServletResponse) response).setHeader(JwtUtils.AUTH_HEADER, jwtToken);
-            return BaseResponse.success(ResultCode.SUCCESS);
+            return BaseResponse.success(ResultCode.LOGIN_SUCCESS);
         }
-        return BaseResponse.failure(ResultCode.FAILED);
+        return BaseResponse.failure(ResultCode.LOGIN_FAILURE);
 
     }
 

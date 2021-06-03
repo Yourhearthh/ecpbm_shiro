@@ -23,16 +23,10 @@ import java.io.IOException;
 @Api(tags = "注销")
 public class LogoutController {
     @GetMapping(value = "/logout")
-    public BaseResponse logout(HttpServletResponse response) throws IOException {
-        Subject currentUser = SecurityUtils.getSubject();
-        try {
-            currentUser.logout();
-            return BaseResponse.success(ResultCode.SUCCESS);
-        } catch (AuthenticationException e) {
-            e.printStackTrace();
-        }
+    public BaseResponse logout() {
+        SecurityUtils.getSubject().logout();
+        return BaseResponse.success(ResultCode.LOGOUT_SUCCESS);
 
-        return BaseResponse.failure(ResultCode.FAILED);
     }
 
 
