@@ -1,10 +1,11 @@
 package com.example.shiro;
 
-import com.example.dao.mapper.UserInfoMapper;
+import com.example.dao.mapper.*;
 import com.example.jwt.JwtToken;
 import com.example.pojo.SysPermission;
 import com.example.pojo.SysRole;
 import com.example.pojo.UserInfo;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -16,6 +17,8 @@ import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.security.SecureRandom;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName:
@@ -28,6 +31,14 @@ public class ShiroRealm extends AuthorizingRealm {
 
     @Autowired
     UserInfoMapper userInfoMapper;
+    @Autowired
+    SysUserRoleMapper sysUserRoleMapper;
+    @Autowired
+    SysRoleMapper sysRoleMapper;
+    @Autowired
+    SysRolePermissionMapper sysRolePermissionMapper;
+    @Autowired
+    SysPermissionMapper sysPermissionMapper;
     /**
      * 限定这个 Realm 只处理 UsernamePasswordToken
      */
@@ -78,12 +89,17 @@ public class ShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         System.out.println("权限配置-->MyShiroRealm.doGetAuthorizationInfo()");
-        UserInfo userInfo = (UserInfo) principalCollection.getPrimaryPrincipal();
+        UserInfo currentUser = (UserInfo) principalCollection.getPrimaryPrincipal();
+
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+
+        List<SysRole> roleList = sysRoleMapper.selectByUid(currentUser.getUid());
+        List<Integer> list = roleList.stream().map(SysRole::getId).collect(Collectors.toList());
+        List<SysPermission> permissionList = sysPermissionMapper.selectByRoleId(list);
         // 获取当前用户的角色与权限，让 simpleAuthorizationInfo 去验证
-        for (SysRole sysRole : userInfo.getRoleList()) {
+        for (SysRole sysRole : roleList) {
             simpleAuthorizationInfo.addRole(sysRole.getRole());
-            for (SysPermission sysPermission : sysRole.getPermissions()) {
+            for (SysPermission sysPermission : permissionList) {
                 simpleAuthorizationInfo.addStringPermission(sysPermission.getPermission());
             }
         }

@@ -1,9 +1,10 @@
 package com.example.shiro;
 
-import com.example.dao.mapper.UserInfoMapper;
+import com.example.dao.mapper.*;
 import com.example.jwt.JwtToken;
 import com.example.pojo.SysPermission;
 import com.example.pojo.SysRole;
+import com.example.pojo.SysRolePermission;
 import com.example.pojo.UserInfo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -13,7 +14,9 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName:
@@ -26,6 +29,14 @@ public class JwtRealm extends AuthorizingRealm {
 
     @Autowired
     UserInfoMapper userInfoMapper;
+    @Autowired
+    SysUserRoleMapper sysUserRoleMapper;
+    @Autowired
+    SysRoleMapper sysRoleMapper;
+    @Autowired
+    SysRolePermissionMapper sysRolePermissionMapper;
+    @Autowired
+    SysPermissionMapper sysPermissionMapper;
 
     /**
      * 限定这个 Realm 只处理我们自定义的 JwtToken
@@ -69,10 +80,14 @@ public class JwtRealm extends AuthorizingRealm {
         // 获取当前用户
         UserInfo currentUser = (UserInfo) SecurityUtils.getSubject().getPrincipal();
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+
+        List<SysRole> roleList = sysRoleMapper.selectByUid(currentUser.getUid());
+        List<Integer> list = roleList.stream().map(SysRole::getId).collect(Collectors.toList());
+        List<SysPermission> permissionList = sysPermissionMapper.selectByRoleId(list);
         // 获取当前用户的角色与权限，让 simpleAuthorizationInfo 去验证
-        for (SysRole sysRole : currentUser.getRoleList()) {
+        for (SysRole sysRole : roleList) {
             simpleAuthorizationInfo.addRole(sysRole.getRole());
-            for (SysPermission sysPermission : sysRole.getPermissions()) {
+            for (SysPermission sysPermission : permissionList) {
                 simpleAuthorizationInfo.addStringPermission(sysPermission.getPermission());
             }
         }

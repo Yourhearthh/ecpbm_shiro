@@ -55,10 +55,6 @@ public class LoginController {
 
     }
 
-    @GetMapping("/403")
-    public String unauthorizedRole() {
-        return "403";
-    }
 
 
 

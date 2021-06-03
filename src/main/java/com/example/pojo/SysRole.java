@@ -44,15 +44,15 @@ public class SysRole implements Serializable {
     @TableField("available")
     private Boolean available = Boolean.FALSE; // 是否可用,如果不可用将不会添加给用户
 
-    // 用户 - 角色关系定义;
-    @ManyToMany
-    @JoinTable(name = "SysUserRole", joinColumns = {@JoinColumn(name = "roleId")}, inverseJoinColumns = {@JoinColumn(name = "uid")})
-    @TableField(exist = false)
-    private List<UserInfo> userInfos;// 一个角色对应多个用户
-
-    //角色 -- 权限关系：多对多关系;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "SysRolePermission", joinColumns = {@JoinColumn(name = "roleId")}, inverseJoinColumns = {@JoinColumn(name = "permissionId")})
-    @TableField(exist = false)
-    private List<SysPermission> permissions;
+//    // 用户 - 角色关系定义;
+//    @ManyToMany
+//    @JoinTable(name = "SysUserRole", joinColumns = {@JoinColumn(name = "roleId")}, inverseJoinColumns = {@JoinColumn(name = "uid")})
+//    @TableField(exist = false)
+//    private List<UserInfo> userInfos;// 一个角色对应多个用户
+//
+//    //角色 -- 权限关系：多对多关系;
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(name = "SysRolePermission", joinColumns = {@JoinColumn(name = "roleId")}, inverseJoinColumns = {@JoinColumn(name = "permissionId")})
+//    @TableField(exist = false)
+//    private List<SysPermission> permissions;
 }

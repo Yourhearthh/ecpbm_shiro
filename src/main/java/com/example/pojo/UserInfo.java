@@ -65,10 +65,10 @@ public class UserInfo implements Serializable {
     @TableField("salt")
     private String salt; // 加密密码的盐
 
-    @ManyToMany(fetch = FetchType.EAGER) // 立即从数据库中进行加载数据;
-    @JoinTable(name = "SysUserRole", joinColumns = {@JoinColumn(name = "uid")}, inverseJoinColumns = {@JoinColumn(name = "roleId")})
-    @TableField(exist = false)
-    private List<SysRole> roleList; // 一个用户具有多个角色
+//    @ManyToMany(fetch = FetchType.EAGER) // 立即从数据库中进行加载数据;
+//    @JoinTable(name = "SysUserRole", joinColumns = {@JoinColumn(name = "uid")}, inverseJoinColumns = {@JoinColumn(name = "roleId")})
+//    @TableField(exist = false)
+//    private List<SysRole> roleList; // 一个用户具有多个角色
 
     /**
      * 密码盐，重新对盐重新进行了定义，用户名+salt，这样就更加不容易被破解
