@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -103,7 +104,7 @@ public class ProductInfoController {
 
     @ApiOperation("获取在售商品")
     @GetMapping("/getSaleOnProduct")
-    @RequiresPermissions("productInfo:onsale")
+    @RequiresRoles(value = {"admin"})
     @ApiImplicitParam(name = "status", value = "商品状态（0：下架；1：在售）", dataType = "int", paramType = "query")
     public BaseResponse<List<ProductInfo>> getSaleOnProduct(Integer status) {
         List<ProductInfo> infoList = productService.getSaleOnProduct(status);

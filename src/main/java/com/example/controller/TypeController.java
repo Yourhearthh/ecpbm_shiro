@@ -6,6 +6,7 @@ import com.example.pojo.Type;
 import com.example.utils.ResultCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +39,7 @@ public class TypeController {
     }
 
     @ApiOperation("获取全部商品类型")
+    @RequiresRoles(value = {"vip"})
     @GetMapping("/getTypes")
     public BaseResponse<List<Type>> getTypes() {
         List<Type> typeList = typeService.list();
